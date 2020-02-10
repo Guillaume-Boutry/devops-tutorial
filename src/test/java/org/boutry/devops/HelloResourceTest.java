@@ -18,4 +18,12 @@ public class HelloResourceTest {
              .body(is("hello"));
     }
 
+    @Test
+    public void testHelloName() {
+        given()
+                .when().get("/hello/Dumbo")
+                .then()
+                .statusCode(200)
+                .body(is("<h1>hello Dumbo</h1>"));
+    }
 }

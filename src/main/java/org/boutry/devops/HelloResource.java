@@ -1,5 +1,7 @@
 package org.boutry.devops;
 
+import org.boutry.devops.config.DatabaseConfiguration;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,8 +15,11 @@ public class HelloResource {
     @Inject
     HelloService service;
 
+    @Inject
+    DatabaseConfiguration databaseConfiguration;
+
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_HTML)
     @Path("/{name}")
     public String helloing(@PathParam("name") String name) {
         return service.greeting(name);
