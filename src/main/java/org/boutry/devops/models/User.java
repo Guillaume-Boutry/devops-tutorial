@@ -1,36 +1,33 @@
 package org.boutry.devops.models;
 
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 public class User {
-
-    public long id;
-    public String firstname;
-    public String lastname;
+    private String firstname;
+    private String lastname;
 
     public User() {
 
     }
 
-    public User(int id, @NotNull String firstname, @NotNull String lastname) {
-        this.id = id;
+    public User(@NotNull String firstname, @NotNull String lastname) {
         this.firstname = firstname;
         this.lastname = lastname;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id &&
-                firstname.equals(user.firstname) &&
-                lastname.equals(user.lastname);
+    public String getFirstname() {
+        return firstname;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstname, lastname);
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 }

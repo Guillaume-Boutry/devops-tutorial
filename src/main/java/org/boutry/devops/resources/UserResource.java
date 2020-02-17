@@ -1,43 +1,41 @@
 package org.boutry.devops.resources;
 
+import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.models.User;
-import org.boutry.devops.services.UserService;
 
-import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
-import java.util.Optional;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-    @Inject
-    UserService service;
-
     @GET
-    public Collection<User> getUsers() {
-        return service.getUsers();
+    public Collection<UserEntity> getUsers() {
+        return UserEntity.listAll();
     }
-
 
     @GET
     @Path("/{id}")
-    public User getUser(@PathParam("id") long id) {
-        return Optional.ofNullable(service.getUser(id)).orElseThrow(() -> new NotFoundException(String.format("Unable to find user id %s", id)));
+    public UserEntity getUser(@PathParam("id") long id) {
+        return UserEntity.findByIdOptional(id).orElseThrow(() -> new NotFoundException(String.format("Unable to find user id %s", id)));
     }
 
     @POST
-    public User createUser(User user) {
-        service.addUser(user);
-        return service.getUser(user.id);
+    @Transactional
+    public UserEntity createUser(User user) {
+        UserEntity userEntity = UserEntity.fromUser(user);
+        userEntity.persist();
+        return userEntity;
     }
 
     @DELETE
-    public void deleteUser(User user) {
-        service.deleteUser(user);
+    @Transactional
+    public void deleteUser(UserEntity user) {
+        UserEntity.delete(user);
     }
 
 }

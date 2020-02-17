@@ -2,6 +2,7 @@ package org.boutry.devops.resources;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.models.User;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,33 +15,19 @@ class UserResourceTest {
     @Test
     @Disabled("Only example")
     public void testUsersEndpoint() {
-        User[] users = given()
+        UserEntity[] users = given()
                 .when().get("/user")
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(User[].class);
+                .as(UserEntity[].class);
         assertEquals(2, users.length);
     }
 
     @Test
-    public void testPatrick() {
-        User user = given()
-                .when()
-                .pathParam("id", 1)
-                .get("/user/{id}")
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(User.class);
-        assertEquals("Patrick", user.firstname);
-
-    }
-
-    @Test
-    public void testAddUser() {
-        User user = new User(57, "Jean", "Tardini");
-        User returnedUser = given()
+    public void testGetUser() {
+        User user = new User("Patrick", "Kalashi");
+        UserEntity returned = given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
@@ -48,13 +35,38 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(User.class);
-        assertEquals(user, returnedUser);
+                .as(UserEntity.class);
+        UserEntity userEntity = given()
+                .when()
+                .pathParam("id", returned.id)
+                .get("/user/{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(UserEntity.class);
+        assertEquals("Patrick", userEntity.firstname);
+
+    }
+
+    @Test
+    public void testAddUser() {
+        User user = new User("Jean", "Tardini");
+        UserEntity returnedUser = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/user")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(UserEntity.class);
+        assertEquals(user.getFirstname(), returnedUser.firstname);
+        assertEquals(user.getLastname(), returnedUser.lastname);
     }
 
     @Test
     public void testDeleteUser() {
-        User user = new User(58, "Jean", "Kalashi");
+        User user = new User("Jean", "Kalashi");
         given()
                 .when()
                 .contentType(ContentType.JSON)
