@@ -17,15 +17,15 @@ public class UserEntity extends PanacheEntity {
 
     @NotNull(message = "Firstname must not be null")
     @NotBlank(message = "Firstname must not be blank")
-    String firstname;
+    public String firstname;
     @NotNull(message = "Lastname must not be null")
     @NotBlank(message = "Lastname must not be blank")
-    String lastname;
+    public String lastname;
     @NotNull(message = "Email must not be null")
     @NotBlank(message = "Email must not be blank")
     @Email
     @Column(unique = true)
-    String email;
+    public String email;
 
     public static UserEntity fromUser(User user) {
         UserEntity uE = new UserEntity();
