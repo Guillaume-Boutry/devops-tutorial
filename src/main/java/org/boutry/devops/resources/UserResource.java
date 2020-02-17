@@ -57,7 +57,6 @@ public class UserResource {
     @DELETE
     @Transactional
     public void deleteUser(UserEntity user) {
-        validator.validate(user);
         UserEntity.delete(user);
     }
 
