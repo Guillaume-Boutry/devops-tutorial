@@ -5,6 +5,7 @@ import org.boutry.devops.models.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -42,6 +43,10 @@ public class UserEntity extends PanacheEntity {
         return Optional.ofNullable(UserEntity.findById(id));
     }
 
+    public static Optional<UserEntity> findByEmailOptional(@NotNull String email) {
+        return Optional.ofNullable(UserEntity.find("email", email).firstResult());
+    }
+
     public static void delete(UserEntity user) {
         delete("id", user.id);
     }
@@ -72,6 +77,10 @@ public class UserEntity extends PanacheEntity {
 
     @Override
     public void persist() {
+        Optional<UserEntity> user = UserEntity.findByEmailOptional(email);
+        if (user.isPresent()) {
+            throw new ConstraintViolationException("email should be unique", null);
+        }
         super.persist();
     }
 
