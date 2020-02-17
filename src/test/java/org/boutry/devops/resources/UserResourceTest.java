@@ -102,4 +102,28 @@ class UserResourceTest {
                 .statusCode(409);
     }
 
+
+    @Test
+    public void testBlankField() {
+        User user = new User("Jean", "", "jean.kalash@gmail.com");
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/user")
+                .then()
+                .statusCode(422);
+    }
+
+    @Test
+    public void testNullField() {
+        User user = new User(null, "Balkany", "jean.kalash@gmail.com");
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/user")
+                .then()
+                .statusCode(422);
+    }
 }
