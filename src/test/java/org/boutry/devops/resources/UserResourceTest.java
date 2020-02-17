@@ -26,7 +26,7 @@ class UserResourceTest {
 
     @Test
     public void testGetUser() {
-        User user = new User("Patrick", "Kalashi");
+        User user = new User("Patrick", "Kalashi", "patrick.kalashi@gmail.com");
         UserEntity returned = given()
                 .when()
                 .contentType(ContentType.JSON)
@@ -50,7 +50,7 @@ class UserResourceTest {
 
     @Test
     public void testAddUser() {
-        User user = new User("Jean", "Tardini");
+        User user = new User("Jean", "Tardini", "jean.tardini@gmail.com");
         UserEntity returnedUser = given()
                 .when()
                 .contentType(ContentType.JSON)
@@ -66,7 +66,7 @@ class UserResourceTest {
 
     @Test
     public void testDeleteUser() {
-        User user = new User("Jean", "Kalashi");
+        User user = new User("Jean", "Kalashi", "jean.kalash@gmail.com");
         given()
                 .when()
                 .contentType(ContentType.JSON)

@@ -3,19 +3,34 @@ package org.boutry.devops.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.boutry.devops.models.User;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 
 @Entity
 public class UserEntity extends PanacheEntity {
-    public String firstname;
-    public String lastname;
+
+    @NotNull(message = "Firstname must not be null")
+    @NotBlank(message = "Firstname must not be blank")
+    private String firstname;
+    @NotNull(message = "Lastname must not be null")
+    @NotBlank(message = "Lastname must not be blank")
+    private String lastname;
+    @NotNull(message = "Email must not be null")
+    @NotBlank(message = "Email must not be blank")
+    @Email
+    @Column(unique = true)
+    private String email;
 
     public static UserEntity fromUser(User user) {
         UserEntity uE = new UserEntity();
         uE.firstname = user.getFirstname();
         uE.lastname = user.getLastname();
+        uE.email = user.getEmail();
         return uE;
     }
 
@@ -45,6 +60,14 @@ public class UserEntity extends PanacheEntity {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
