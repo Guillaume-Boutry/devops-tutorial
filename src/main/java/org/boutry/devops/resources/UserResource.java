@@ -3,6 +3,8 @@ package org.boutry.devops.resources;
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.models.User;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,6 +14,9 @@ import java.util.Collection;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
+
+    @Inject
+    EntityManager entityManager;
 
     @GET
     public Collection<UserEntity> getUsers() {
@@ -30,6 +35,13 @@ public class UserResource {
         UserEntity userEntity = UserEntity.fromUser(user);
         userEntity.persist();
         return userEntity;
+    }
+
+    @PUT
+    @Transactional
+    public UserEntity updateUser(UserEntity userEntity) {
+        UserEntity modified = entityManager.merge(userEntity);
+        return modified;
     }
 
     @DELETE
