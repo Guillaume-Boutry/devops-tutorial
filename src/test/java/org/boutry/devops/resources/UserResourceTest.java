@@ -66,7 +66,7 @@ class UserResourceTest {
 
     @Test
     public void testDeleteUser() {
-        User user = new User("Jean", "Kalashi", "jean.kalash@gmail.com");
+        User user = new User("Jean", "Particiani", "jean.particiani@gmail.com");
         given()
                 .when()
                 .contentType(ContentType.JSON)
