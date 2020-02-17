@@ -82,4 +82,24 @@ class UserResourceTest {
                 .then()
                 .statusCode(204);
     }
+
+    @Test
+    public void testDuplicateUser() {
+        User user = new User("Jean", "Kalashi", "jean.kalash@gmail.com");
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/user")
+                .then()
+                .statusCode(200);
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/user")
+                .then()
+                .statusCode(409);
+    }
+
 }
