@@ -10,8 +10,13 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+//@Testcontainers
 @QuarkusTest
 class UserResourceTest {
+
+  /*  @Container
+    static MariaDBContainer db = new MariaDBContainer();*/
+
     @Test
     @Disabled("Only example")
     public void testUsersEndpoint() {

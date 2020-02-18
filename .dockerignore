@@ -3,3 +3,5 @@
 !target/*-runner.jar
 !target/lib/*
 !target/classes/application.yaml
+!pom.xml
+!src/

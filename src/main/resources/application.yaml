@@ -5,12 +5,13 @@ database:
 
 quarkus:
   datasource:
-    url: jdbc:mariadb://localhost:3306/APPLICATION
-    driver: org.mariadb.jdbc.Driver
-    username: devops
-    password: devops
+    url: ${database.url}
+    driver: ${database.driver}
+    username: ${database.username}
+    password: ${database.password}
     min-size: 3
     max-size: 13
   hibernate-orm:
     database:
       generation: drop-and-create
+    dialect: org.hibernate.dialect.MariaDB103Dialect
