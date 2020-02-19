@@ -9,5 +9,5 @@ steps:
   # Deploy container image to Cloud Run
   #- name: 'gcr.io/cloud-builders/gcloud'
   # args: ['run', 'deploy', '[SERVICE_NAME]', '--image', 'gcr.io/[PROJECT_ID]/[IMAGE]', '--region', '[REGION]', '--platform', 'managed', '--allow-unauthenticated']
-images:
-  - gcr.io/devops-tutorial-268713/devops-tutorial
+#images:
+#  - gcr.io/devops-tutorial-268713/devops-tutorial
