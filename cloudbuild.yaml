@@ -3,6 +3,8 @@ steps:
     entrypoint: 'mvn'
     args: ['package']
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'gcr.io/devops-tutorial-268713/devops-tutorial', '.' ]
+    args: [ 'build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'gcr.io/devops-tutorial-268713/devops-tutorial', '.' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/devops-tutorial-268713/devops-tutorial']
+images:
+  - gcr.io/devops-tutorial-268713/devops-tutorial
