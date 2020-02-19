@@ -4,30 +4,13 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.models.User;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@Testcontainers
 @QuarkusTest
 class UserResourceTest {
-
-  /*  @Container
-    static MariaDBContainer db = new MariaDBContainer();*/
-
-    @Test
-    @Disabled("Only example")
-    public void testUsersEndpoint() {
-        UserEntity[] users = given()
-                .when().get("/user")
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(UserEntity[].class);
-        assertEquals(2, users.length);
-    }
 
     @Test
     public void testGetUser() {
@@ -107,6 +90,20 @@ class UserResourceTest {
                 .statusCode(409);
     }
 
+    @Test
+    public void testLowerCaseMail() {
+        User user = new User("Jean", "Kalashi", "JUAN.kalash@gmail.com");
+        UserEntity userEntity = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/user")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(UserEntity.class);
+        assertEquals(user.getEmail().toLowerCase(), userEntity.email);
+    }
 
     @Test
     public void testBlankField() {

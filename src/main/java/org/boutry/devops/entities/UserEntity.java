@@ -72,7 +72,7 @@ public class UserEntity extends PanacheEntity {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     @Override
@@ -85,18 +85,37 @@ public class UserEntity extends PanacheEntity {
     }
 
     @Override
+    public void persistAndFlush() {
+        Optional<UserEntity> user = UserEntity.findByEmailOptional(email);
+        if (user.isPresent()) {
+            throw new ConstraintViolationException("email should be unique", null);
+        }
+        super.persistAndFlush();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserEntity user = (UserEntity) o;
-        return id.equals(user.id) &&
-                firstname.equals(user.firstname) &&
-                lastname.equals(user.lastname);
+        UserEntity that = (UserEntity) o;
+        return id.equals(that.id) &&
+                firstname.equals(that.firstname) &&
+                lastname.equals(that.lastname) &&
+                email.equals(that.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname);
+        return Objects.hash(id, firstname, lastname, email);
     }
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
