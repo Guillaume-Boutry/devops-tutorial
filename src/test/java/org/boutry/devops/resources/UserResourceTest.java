@@ -3,7 +3,6 @@ package org.boutry.devops.resources;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.boutry.devops.entities.UserEntity;
-import org.boutry.devops.models.User;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -13,21 +12,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserResourceTest {
 
     @Test
-    public void testGetUser() {
-        User user = new User("Patrick", "Kalashi", "patrick.kalashi@gmail.com");
-        UserEntity returned = given()
+    public void testGetUserEntity() {
+        UserEntity user = new UserEntity("Patrick", "Kalashi", "patrick.kalashi@gmail.com");
+        String location = given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .post("/api/user")
                 .then()
-                .statusCode(200)
+                .statusCode(201)
                 .extract()
-                .as(UserEntity.class);
+                .header("Location");
         UserEntity userEntity = given()
                 .when()
-                .pathParam("id", returned.id)
-                .get("/user/{id}")
+                .get(location)
                 .then()
                 .statusCode(200)
                 .extract()
@@ -37,94 +35,122 @@ class UserResourceTest {
     }
 
     @Test
-    public void testAddUser() {
-        User user = new User("Jean", "Tardini", "jean.tardini@gmail.com");
-        UserEntity returnedUser = given()
+    public void testAddUserEntity() {
+        UserEntity user = new UserEntity("Jean", "Tardini", "jean.tardini@gmail.com");
+        given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .post("/api/user")
                 .then()
-                .statusCode(200)
-                .extract()
-                .as(UserEntity.class);
-        assertEquals(user.getFirstname(), returnedUser.firstname);
-        assertEquals(user.getLastname(), returnedUser.lastname);
+                .statusCode(201);
     }
 
     @Test
-    public void testDeleteUser() {
-        User user = new User("Jean", "Particiani", "jean.particiani@gmail.com");
-        given()
+    public void testDeleteUserEntity() {
+        UserEntity user = new UserEntity("Jean", "Particiani", "jean.particiani@gmail.com");
+        String location = given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .post("/api/user")
                 .then()
-                .statusCode(200);
+                .statusCode(201)
+                .extract()
+                .header("Location");
+        user = given()
+                .when()
+                .get(location)
+                .then()
+                .extract()
+                .as(UserEntity.class);
         given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .delete("/user")
+                .delete("/api/user")
                 .then()
                 .statusCode(204);
     }
 
     @Test
-    public void testDuplicateUser() {
-        User user = new User("Jean", "Kalashi", "jean.kalash@gmail.com");
-        given()
+    public void testModifyUserEntity() {
+        UserEntity user = new UserEntity("Jeanne", "Calmant", "je.ca@gmail.com");
+        String location = given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .post("/api/user")
                 .then()
-                .statusCode(200);
+                .statusCode(201)
+                .extract()
+                .header("Location");
+        user = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .get(location)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(UserEntity.class);
+        user.email = "jaja@gmail.com";
         given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .put("/api/user")
+                .then()
+                .statusCode(204);
+        UserEntity returned = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .get(location)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(UserEntity.class);
+        assertEquals(user.email, returned.email);
+    }
+
+    @Test
+    public void testDuplicateUserEntity() {
+        UserEntity user = new UserEntity("Jean", "Kalashi", "jean.kalash@gmail.com");
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/api/user")
+                .then()
+                .statusCode(201);
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .post("/api/user")
                 .then()
                 .statusCode(409);
     }
 
     @Test
-    public void testLowerCaseMail() {
-        User user = new User("Jean", "Kalashi", "JUAN.kalash@gmail.com");
-        UserEntity userEntity = given()
-                .when()
-                .contentType(ContentType.JSON)
-                .body(user)
-                .post("/user")
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(UserEntity.class);
-        assertEquals(user.getEmail().toLowerCase(), userEntity.email);
-    }
-
-    @Test
     public void testBlankField() {
-        User user = new User("Jean", "", "jean.kalash@gmail.com");
+        UserEntity user = new UserEntity("Jean", "", "jean.kalash@gmail.com");
         given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .post("/api/user")
                 .then()
                 .statusCode(422);
     }
 
     @Test
     public void testNullField() {
-        User user = new User(null, "Balkany", "jean.kalash@gmail.com");
+        UserEntity user = new UserEntity(null, "Balkany", "jean.kalash@gmail.com");
         given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(user)
-                .post("/user")
+                .post("/api/user")
                 .then()
                 .statusCode(422);
     }

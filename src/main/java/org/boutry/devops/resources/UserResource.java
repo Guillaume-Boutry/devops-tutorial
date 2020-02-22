@@ -2,7 +2,6 @@ package org.boutry.devops.resources;
 
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.exception.ViolationException;
-import org.boutry.devops.models.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -10,8 +9,13 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 @Path("/user")
@@ -33,31 +37,52 @@ public class UserResource {
     @GET
     @Path("/{id}")
     public UserEntity getUser(@PathParam("id") long id) {
-        return UserEntity.findByIdOptional(id).orElseThrow(() -> new NotFoundException(String.format("Unable to find user id %s", id)));
+        Optional<UserEntity> userOptional = UserEntity.findByIdOptional(id);
+        if (userOptional.isEmpty()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return userOptional.get();
     }
 
     @POST
     @Transactional
-    public UserEntity createUser(User user) throws ViolationException {
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
+    public Response createUser(@Context UriInfo uriInfo, UserEntity newUser) throws ViolationException {
+        Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
         if (!violations.isEmpty()) {
             throw new ViolationException(violations.toArray(new ConstraintViolation[]{}));
         }
-        UserEntity userEntity = UserEntity.fromUser(user);
-        userEntity.persist();
-        return userEntity;
+        UserEntity user = new UserEntity();
+        user.email = newUser.email;
+        user.lastname = newUser.lastname;
+        user.firstname = newUser.firstname;
+        user.persist();
+        URI uri = uriInfo.getAbsolutePathBuilder()
+                .path(UserResource.class, "getUser")
+                .build(user.id);
+        return Response.created(uri).build();
     }
 
     @PUT
     @Transactional
-    public UserEntity updateUser(UserEntity userEntity) throws ViolationException {
-        return entityManager.merge(userEntity);
+    public void updateUser(UserEntity userEntity) throws ViolationException {
+        Optional<UserEntity> userOptional = UserEntity.findByIdOptional(userEntity.id);
+        if (userOptional.isEmpty()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        UserEntity user = userOptional.get();
+        user.firstname = userEntity.firstname;
+        user.lastname = userEntity.lastname;
+        user.email = userEntity.email;
     }
 
     @DELETE
     @Transactional
     public void deleteUser(UserEntity user) {
-        UserEntity.delete(user);
+        Optional<UserEntity> userOptional = UserEntity.findByIdOptional(user.id);
+        if (userOptional.isEmpty()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        userOptional.get().delete();
     }
 
 }

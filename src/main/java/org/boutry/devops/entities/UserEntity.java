@@ -1,7 +1,6 @@
 package org.boutry.devops.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import org.boutry.devops.models.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,12 +26,14 @@ public class UserEntity extends PanacheEntity {
     @Column(unique = true)
     public String email;
 
-    public static UserEntity fromUser(User user) {
-        UserEntity uE = new UserEntity();
-        uE.firstname = user.getFirstname();
-        uE.lastname = user.getLastname();
-        uE.email = user.getEmail();
-        return uE;
+    public UserEntity() {
+
+    }
+
+    public UserEntity(String firstname, String lastname, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
     }
 
     public static UserEntity findById(long id) {
