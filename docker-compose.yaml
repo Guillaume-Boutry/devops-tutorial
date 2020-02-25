@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: boutry/devops-tutorial-jvm
+    depends_on:
+      - db
+    environment:
+      - quarkus.datasource.url=jdbc:mariadb://db:3306/APPLICATION
+    ports:
+      - "8080:8080"
+    networks:
+      - subnet
+  db:
+    image: mariadb/server:10.4
+    ports:
+      - "3306:3306"
+    networks:
+      - subnet
+    command: --init-file /tmp/init_database.sql --bind-address 0.0.0.0
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+    volumes:
+      - sql-persistence:/var/lib/mysql
+      - ./init_database.sql:/tmp/init_database.sql
+
+networks:
+  subnet:
+
+volumes:
+  sql-persistence:
