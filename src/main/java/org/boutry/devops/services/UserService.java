@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -29,7 +29,7 @@ public class UserService {
     public UserEntity getUser(long id) {
         Optional<UserEntity> userOptional = UserEntity.findByIdOptional(id);
         if (userOptional.isEmpty()) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new NotFoundException("User not found");
         }
         return userOptional.get();
     }
@@ -53,7 +53,7 @@ public class UserService {
     public void modifyUser(UserEntity userEntity) {
         Optional<UserEntity> userOptional = UserEntity.findByIdOptional(userEntity.id);
         if (userOptional.isEmpty()) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new NotFoundException("User not found");
         }
         UserEntity user = userOptional.get();
         user.firstname = userEntity.firstname;
@@ -64,7 +64,7 @@ public class UserService {
     public void deleteUser(UserEntity userEntity) {
         Optional<UserEntity> userOptional = UserEntity.findByIdOptional(userEntity.id);
         if (userOptional.isEmpty()) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new NotFoundException("User not found");
         }
         userOptional.get().delete();
     }
