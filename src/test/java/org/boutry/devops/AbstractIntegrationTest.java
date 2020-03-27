@@ -1,10 +1,10 @@
 package org.boutry.devops;
 
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 public abstract class AbstractIntegrationTest {
 
-    public static MySQLContainer db = new MySQLContainer("mysql/mysql-server:8.0.19-1.1.15");
+    public static PostgreSQLContainer db = new PostgreSQLContainer();
 
     static {
         db.start();
