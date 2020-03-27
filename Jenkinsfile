@@ -29,7 +29,7 @@ pipeline {
           filename "src/main/docker/Dockerfile.jvm"
         }
       }
-      steps {
+      script {
         withDockerServer([uri: "tcp://docker:2376"]) {
          withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
            def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
