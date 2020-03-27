@@ -16,7 +16,7 @@ quarkus:
 "%test":
   quarkus:
     datasource:
-      url: jdbc:tc:mariadb:10.5://docker/APPLICATION
+      url: jdbc:tc:mysql:8.0.19://docker/APPLICATION
       driver: org.testcontainers.jdbc.ContainerDatabaseDriver
       username: ${database.username}
       password: ${database.password}
