@@ -22,5 +22,22 @@ pipeline {
       }
     }
 
+    stage('Build docker') {
+      steps {
+        sh '''docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm "$WORKSPACE"
+'''
+      }
+    }
+
+    stage('Push to docker image registry') {
+      steps {
+        sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
+      }
+    }
+
+  }
+  environment {
+    registry = 'registry.zouzland.com'
+    registryCredential = 'registry'
   }
 }
