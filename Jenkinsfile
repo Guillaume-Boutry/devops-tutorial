@@ -23,12 +23,13 @@ pipeline {
     }
 
     stage('Build docker and push') {
-      withDockerServer([uri: "tcp://docker:2376"]) {
-        withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
-          // we give the image the same version as the .war package
-          def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
-          def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
-          image.push()
+      steps {
+        withDockerServer([uri: "tcp://docker:2376"]) {
+          withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
+            def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
+            def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
+            image.push()
+          }
         }
       }
     }
