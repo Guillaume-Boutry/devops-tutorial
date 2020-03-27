@@ -138,7 +138,7 @@
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <quarkus.datasource.driver>org.testcontainers.jdbc.ContainerDatabaseDriver</quarkus.datasource.driver>
-            <quarkus.datasource.url>jdbc:tc:mariadb:10.5://localhost:3306/APPLICATION</quarkus.datasource.url>
+            <quarkus.datasource.url>jdbc:tc:mariadb:10.5://docker/APPLICATION</quarkus.datasource.url>
           </systemProperties>
         </configuration>
       </plugin>
