@@ -15,6 +15,9 @@ pipeline {
     stage('Test') {
       environment {
         CI = 'true'
+        DOCKER_HOST = '$DOCKER_HOST'
+        DOCKER_CERT_PATH = '/certs/client'
+        DOCKER_TLS_VERIFY = '1'
       }
       steps {
         sh 'mvn test'
