@@ -1,7 +1,7 @@
 quarkus:
   datasource:
-    url: ${database.url}
-    driver: ${database.driver}
+    url: jdbc:postgresql://localhost/APPLICATION
+    driver: org.postgresql.Driver
     username: ${database.username}
     password: ${database.password}
     min-size: 3
@@ -9,6 +9,22 @@ quarkus:
   hibernate-orm:
     database:
       generation: update # drop-and-create
-    dialect: org.hibernate.dialect.MariaDB103Dialect
+    dialect: org.hibernate.dialect.PostgreSQLDialect
   resteasy:
     path: /api
+
+"%test":
+  quarkus:
+    datasource:
+      url: jdbc:tc:postgresql:9.6.12://docker/APPLICATION
+      driver: org.testcontainers.jdbc.ContainerDatabaseDriver
+      username: ${database.username}
+      password: ${database.password}
+      min-size: 3
+      max-size: 13
+    hibernate-orm:
+      database:
+        generation: update # drop-and-create
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    resteasy:
+      path: /api

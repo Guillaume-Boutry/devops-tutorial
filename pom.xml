@@ -7,12 +7,12 @@
   <version>1.0-SNAPSHOT</version>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
-    <database.driver>org.mariadb.jdbc.Driver</database.driver>
+    <database.driver>org.postgresql.Driver</database.driver>
     <database.ip>localhost</database.ip>
     <database.name>APPLICATION</database.name>
     <database.password>devops</database.password>
     <database.port>3306</database.port>
-    <database.url>jdbc:mariadb://${database.ip}:${database.port}/${database.name}</database.url>
+    <database.url>jdbc:progresql://${database.ip}:/${database.name}</database.url>
     <database.username>devops</database.username>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>11</maven.compiler.source>
@@ -73,7 +73,7 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-mariadb</artifactId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -90,13 +90,13 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>1.12.5</version>
+      <version>1.13.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>mariadb</artifactId>
-      <version>1.12.5</version>
+      <artifactId>postgresql</artifactId>
+      <version>1.13.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -138,7 +138,7 @@
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <quarkus.datasource.driver>org.testcontainers.jdbc.ContainerDatabaseDriver</quarkus.datasource.driver>
-            <quarkus.datasource.url>jdbc:tc:mariadb:10.5://docker/APPLICATION</quarkus.datasource.url>
+            <!--quarkus.datasource.url>jdbc:tc:mariadb:10.5://docker/APPLICATION</quarkus.datasource.url-->
           </systemProperties>
         </configuration>
       </plugin>

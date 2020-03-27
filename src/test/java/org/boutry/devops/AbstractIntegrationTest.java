@@ -1,10 +1,10 @@
 package org.boutry.devops;
 
-import org.testcontainers.containers.MariaDBContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 public abstract class AbstractIntegrationTest {
 
-    public static MariaDBContainer db = new MariaDBContainer("mariadb:10.5");
+    public static PostgreSQLContainer db = new PostgreSQLContainer();
 
     static {
         db.start();
