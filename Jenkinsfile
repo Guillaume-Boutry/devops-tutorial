@@ -22,35 +22,21 @@ pipeline {
       }
     }
 
-    stage('Build docker') {
-      agent {
-        docker {
-          image 'docker:dind'
-          args '--network="host" -e DOCKER_HOST="tcp://docker:2376" -e DOCKER_CERT_PATH="/certs/client" -e DOCKER_TLS_VERIFY=1 -v "/certs/client":"/certs/client" -v $(pwd):/tmp/project -w /tmp/project'
+    stage('Build docker and push') {
+      withDockerServer([uri: "tcp://docker:2376"]) {
+        withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
+          // we give the image the same version as the .war package
+          def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
+          def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
+          image.push()
         }
-
-      }
-      steps {
-        sh 'docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm .'
-      }
-    }
-
-    stage('Push to docker image registry') {
-      agent {
-        docker {
-          image 'docker:dind'
-          args '--network="host" -e DOCKER_HOST="tcp://docker:2376" -e DOCKER_CERT_PATH="/certs/client" -e DOCKER_TLS_VERIFY=1 -v "/certs/client":"/certs/client"'
-        }
-
-      }
-      steps {
-        sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
       }
     }
 
   }
+
   environment {
-    registry = 'registry.zouzland.com'
+    registry = 'https://registry.zouzland.com'
     registryCredential = 'registry'
   }
 }
