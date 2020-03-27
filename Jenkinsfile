@@ -23,14 +23,21 @@ pipeline {
     }
 
     stage('Build docker and push') {
-      steps {
-        withDockerServer([uri: "tcp://docker:2376"]) {
-          withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
-            def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
-            def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
-            image.push()
-          }
+      agent {
+        dockerfile {
+          args "-t registry.zouzland.com/boutry/devops-tutorial-jvm"
+          filename "src/main/docker/Dockerfile.jvm"
+          label "latest"
         }
+      }
+      steps {
+        //withDockerServer([uri: "tcp://docker:2376"]) {
+         // withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
+           // def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
+           // def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
+            //image.push()
+         // }
+        //}
       }
     }
 
@@ -40,4 +47,22 @@ pipeline {
     registry = 'https://registry.zouzland.com'
     registryCredential = 'registry'
   }
+
+  post {
+          always {
+              deleteDir() /* clean up our workspace */
+          }
+          success {
+              echo 'SUCCESS'
+          }
+          unstable {
+              echo 'UNSTABLE'
+          }
+          failure {
+              echo 'FAILURE'
+          }
+          changed {
+              echo 'Things were different before...'
+          }
+      }
 }
