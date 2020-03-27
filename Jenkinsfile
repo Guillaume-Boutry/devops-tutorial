@@ -27,7 +27,6 @@ pipeline {
         dockerfile {
           args "-t registry.zouzland.com/boutry/devops-tutorial-jvm"
           filename "src/main/docker/Dockerfile.jvm"
-          label "latest"
         }
       }
       steps {
