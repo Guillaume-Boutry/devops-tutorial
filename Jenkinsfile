@@ -6,9 +6,18 @@ pipeline {
 
   }
   stages {
-    stage('') {
+    stage('Build project') {
       steps {
         sh 'mvn clean install -DskipTests'
+      }
+    }
+
+    stage('Test') {
+      environment {
+        CI = 'true'
+      }
+      steps {
+        sh 'mvn test'
       }
     }
 
