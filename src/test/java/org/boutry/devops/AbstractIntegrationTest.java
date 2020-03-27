@@ -4,7 +4,7 @@ import org.testcontainers.containers.MariaDBContainer;
 
 public abstract class AbstractIntegrationTest {
 
-    public static MariaDBContainer db = new MariaDBContainer("mariadb:10.5");
+    public static MariaDBContainer db = new MariaDBContainer();
 
     static {
         db.start();
