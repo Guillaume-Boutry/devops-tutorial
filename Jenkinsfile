@@ -30,14 +30,13 @@ pipeline {
         }
       }
       steps {
-        sh "echo DOCKERFILE"
-        //withDockerServer([uri: "tcp://docker:2376"]) {
-         // withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
-           // def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
-           // def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
-            //image.push()
-         // }
-        //}
+        withDockerServer([uri: "tcp://docker:2376"]) {
+         withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
+           def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
+           def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
+           image.push()
+          }
+        }
       }
     }
 
