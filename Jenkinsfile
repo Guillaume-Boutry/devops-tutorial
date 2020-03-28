@@ -19,7 +19,7 @@ pipeline {
     }
 
     stage('Build Docker') {
-        agent node {
+        agent {
             label "docker-host"
         }
         environment {
