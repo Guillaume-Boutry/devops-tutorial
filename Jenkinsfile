@@ -36,7 +36,7 @@ pipeline {
         agent any
         steps {
           unstash 'target_built'
-          sh './jenkins/buildDocker.sh'
+          sh 'docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm .'
         }
     }
 
