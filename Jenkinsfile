@@ -39,7 +39,7 @@ pipeline {
         agent any
         steps {
           withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
-            sh "docker login -u ${env.registryUser} -p ${env.registryPassword}"
+            sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
             sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
           }
         }
