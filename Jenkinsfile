@@ -28,10 +28,9 @@ pipeline {
         }
         steps {
           script {
-              unstash 'target_built'
-              def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
-              def image = docker.build(imageName, "-f src/main/docker/Dockerfile.jvm")
-              image.push()
+            checkout scm
+            unstash 'target_built'
+            sh './jenkins/buildDocker.sh'
           }
         }
     }
