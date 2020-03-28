@@ -62,9 +62,13 @@ pipeline {
         steps {
           withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
             sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
-            sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
-            if(TAG_BUILD) {
-                sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:' + VERSION
+            script {
+                if(TAG_BUILD) {
+                    sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
+                    sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:' + VERSION
+                } else {
+                    sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:snapshot'
+                }
             }
           }
         }
