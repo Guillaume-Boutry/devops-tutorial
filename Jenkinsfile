@@ -12,6 +12,7 @@ pipeline {
           name: 'TAG_BUILD'
         )
         string (
+            defaultValue: 'latest',
             description: 'TAG number',
             name: 'TAG'
           )
