@@ -65,8 +65,10 @@ pipeline {
             script {
                 if(TAG_BUILD) {
                     sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
+                    sh 'docker tag registry.zouzland.com/boutry/devops-tutorial-jvm:latest registry.zouzland.com/boutry/devops-tutorial-jvm:' + VERSION
                     sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:' + VERSION
                 } else {
+                    sh 'docker tag registry.zouzland.com/boutry/devops-tutorial-jvm:latest registry.zouzland.com/boutry/devops-tutorial-jvm:snapshot'
                     sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:snapshot'
                 }
             }
