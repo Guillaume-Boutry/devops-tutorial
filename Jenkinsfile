@@ -41,7 +41,10 @@ pipeline {
         agent any
         steps {
           script {
-            sh './jenkins/pushDocker.sh'
+              withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
+                sh "docker login -u ${env.registryUser} -p ${env.registryPassword}"
+                sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
+              }
           }
         }
     }
