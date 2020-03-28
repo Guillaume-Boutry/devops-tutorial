@@ -1,5 +1,11 @@
 pipeline {
   agent any
+  parameters {
+          booleanParam (
+              defaultValue: false,
+              description: '',
+              name : 'FORCE_PUSH')
+      }
   stages {
     stage('Build project') {
     agent {
@@ -37,6 +43,12 @@ pipeline {
 
     stage('Push Docker build to registry') {
         agent any
+        when {
+            expression {
+                GIT_BRANCH = 'origin/' + sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                return GIT_BRANCH == 'origin/master' || params.FORCE_PUSH
+            }
+        }
         steps {
           withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
             sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
