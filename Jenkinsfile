@@ -1,11 +1,22 @@
 pipeline {
   agent any
   parameters {
-          booleanParam (
-              defaultValue: false,
-              description: '',
-              name : 'FORCE_PUSH')
+      booleanParam (
+          defaultValue: false,
+          description: 'Push docker image to registry',
+          name : 'FORCE_PUSH'
+        )
+      booleanParam (
+          defaultValue: false,
+          description: 'Tag current build ?',
+          name: 'TAG_BUILD'
+        )
+        string (
+            description: 'Version number',
+            name: 'VERSION'
+          )
       }
+
   stages {
     stage('Build project') {
     agent {
@@ -52,6 +63,9 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
             sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
             sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
+            if(TAG_BUILD) {
+                sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:' + VERSION
+            }
           }
         }
     }
