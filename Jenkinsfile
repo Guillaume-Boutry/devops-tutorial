@@ -84,13 +84,13 @@ pipeline {
               deleteDir()
           }
           success {
-              echo 'SUCCESS'
+              echo 'BUILD SUCCESS'
           }
           unstable {
-              echo 'UNSTABLE'
+              echo 'BUILD UNSTABLE'
           }
           failure {
-              echo 'FAILURE'
+              echo 'BUILD FAILURE'
           }
           changed {
               echo 'State changed.'
