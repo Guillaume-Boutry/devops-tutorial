@@ -21,7 +21,7 @@ pipeline {
           steps {
               script {
                 docker.withRegistry('https://registry.zouzland.com/v2/', 'registry') {
-                    docker.image('registry.zouland.com/quarkus/centos-quarkus-maven:20.0.0-java11').inside {
+                    docker.image('quarkus/centos-quarkus-maven:20.0.0-java11').inside {
                         sh 'mvn package -Pnative -DskipTests'
                         stash(includes: 'target/', name: 'target_native_built')
                     }
