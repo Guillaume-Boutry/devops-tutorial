@@ -17,16 +17,17 @@ pipeline {
         }
 
         stage('Build Native') {
-          agent {
-            docker {
-              registryUrl 'https://quay.io/repository/'
-              image 'quay.io/quarkus/centos-quarkus-maven:20.0.0-java11'
-            }
-
-          }
+          agent any
           steps {
-            sh 'mvn package -Pnative -DskipTests'
-            stash(includes: 'target/', name: 'target_native_built')
+              script {
+                docker.withRegistry('https://registry.zouzland.com/v2/', 'registry') {
+                    docker.image('registry.zouland.com/quarkus/centos-quarkus-maven:20.0.0-java11').inside {
+                        sh 'mvn package -Pnative -DskipTests'
+                        stash(includes: 'target/', name: 'target_native_built')
+                    }
+                }
+              }
+
           }
         }
 
