@@ -26,10 +26,9 @@ pipeline {
         steps {
           script {
             withDockerServer([uri: "tcp://docker:2376"]) {
-              // we give the image the same version as the .war package
-              withDockerRegistry([credentialsId: '${env.registryCredential}', url: "${env.registry}"]) {
+              withDockerRegistry([credentialsId: env.registryCredential, url: registry]) {
                   def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
-                  def image = docker.build("${imageName}", "-f src/main/docker/Dockerfile.jvm")
+                  def image = docker.build(imageName, "-f src/main/docker/Dockerfile.jvm")
                   image.push()
               }
             }
