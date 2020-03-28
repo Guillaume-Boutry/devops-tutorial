@@ -28,12 +28,10 @@ pipeline {
         }
         steps {
           script {
-            withDockerServer([uri: "tcp://docker:2376"]) {
               unstash 'target_built'
               def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
               def image = docker.build(imageName, "-f src/main/docker/Dockerfile.jvm")
               image.push()
-            }
           }
         }
     }
