@@ -19,15 +19,11 @@ pipeline {
         stage('Build Native') {
           agent any
           steps {
-              script {
-                docker.withRegistry('https://registry.zouzland.com/v2/', 'registry') {
-                    docker.image('quarkus/centos-quarkus-maven:20.0.0-java11').inside {
-                        sh 'mvn package -Pnative -DskipTests'
-                        stash(includes: 'target/', name: 'target_native_built')
-                    }
-                }
+              withCredentials(bindings: [usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
+                sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
+                sh "docker run -v $(pwd):/tmp/build_project -w /tmp/build_project registry.zouzland.com/quarkus/centos-quarkus-maven:20.0.0-java11 mvn package -DskipTests -Pnative"
+                stash(includes: 'target/', name: 'target_native_built')
               }
-
           }
         }
 

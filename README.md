@@ -28,3 +28,5 @@ Or you can use Docker to build the native executable using: `./mvnw package -Pna
 You can then execute your binary: `./target/devops-tutorial-1.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide .
+
+Native built with docker image quay.io/quarkus/centos-quarkus-maven:20.0.0-java11
