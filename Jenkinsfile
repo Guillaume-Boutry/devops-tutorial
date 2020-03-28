@@ -30,21 +30,17 @@ pipeline {
     stage('Build Docker') {
         agent any
         steps {
-          script {
-            unstash 'target_built'
-            sh './jenkins/buildDocker.sh'
-          }
+          unstash 'target_built'
+          sh './jenkins/buildDocker.sh'
         }
     }
 
     stage('Push Docker build to registry') {
         agent any
         steps {
-          script {
-              withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
-                sh "docker login -u ${env.registryUser} -p ${env.registryPassword}"
-                sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
-              }
+          withCredentials([usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
+            sh "docker login -u ${env.registryUser} -p ${env.registryPassword}"
+            sh 'docker push registry.zouzland.com/boutry/devops-tutorial-jvm:latest'
           }
         }
     }
