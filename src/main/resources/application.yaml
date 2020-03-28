@@ -8,7 +8,7 @@ quarkus:
     max-size: 13
   hibernate-orm:
     database:
-      generation: update # drop-and-create
+      generation: none # drop-and-create
     dialect: org.hibernate.dialect.PostgreSQLDialect
   resteasy:
     path: /api
