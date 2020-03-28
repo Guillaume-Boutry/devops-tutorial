@@ -26,7 +26,7 @@ pipeline {
         steps {
           script {
             withDockerServer([uri: "tcp://docker:2376"]) {
-              withDockerRegistry([credentialsId: env.registryCredential, url: registry]) {
+              withDockerRegistry([credentialsId: registryCredential, url: registry]) {
                   def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
                   def image = docker.build(imageName, "-f src/main/docker/Dockerfile.jvm")
                   image.push()
