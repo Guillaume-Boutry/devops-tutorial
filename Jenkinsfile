@@ -31,9 +31,17 @@ pipeline {
         agent any
         steps {
           script {
-            checkout scm
             unstash 'target_built'
             sh './jenkins/buildDocker.sh'
+          }
+        }
+    }
+
+    stage('Push Docker build to registry') {
+        agent any
+        steps {
+          script {
+            sh './jenkins/pushDocker.sh'
           }
         }
     }
