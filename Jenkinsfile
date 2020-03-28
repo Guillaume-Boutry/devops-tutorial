@@ -17,7 +17,7 @@ pipeline {
         }
 
         stage('Build Native') {
-          agent any
+          agent {
             docker {
               registryUrl 'https://registry.zouzland.com/v2/'
               registryCredentials 'registry'
