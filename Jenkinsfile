@@ -9,6 +9,7 @@ pipeline {
     stage('Build project') {
       steps {
         sh 'mvn clean install -DskipTests'
+        stash includes: 'target/', name: 'target_built'
       }
     }
 
@@ -29,6 +30,7 @@ pipeline {
           script {
             withDockerServer([uri: "tcp://docker:2376"]) {
               withDockerRegistry([credentialsId: registryCredential, url: registry]) {
+                  unstash 'target_built'
                   def imageName = "registry.zouzland.com/boutry/devops-tutorial-jvm:latest"
                   def image = docker.build(imageName, "-f src/main/docker/Dockerfile.jvm")
                   image.push()
@@ -41,7 +43,7 @@ pipeline {
   }
 
   environment {
-    registry = 'https://registry.zouzland.com'
+    registry = 'https://registry.zouzland.com/v2/'
     registryCredential = 'registry'
   }
 
