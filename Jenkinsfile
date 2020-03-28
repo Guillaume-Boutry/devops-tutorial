@@ -20,7 +20,7 @@ pipeline {
           agent {
             docker {
               registryUrl 'https://registry.zouzland.com/v2/'
-              registryCredentials 'registry'
+              registryCredentialsId 'registry'
               image 'registry.zouzland.com/quarkus/centos-quarkus-maven:20.0.0-java11'
             }
           }
