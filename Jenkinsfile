@@ -61,7 +61,7 @@ pipeline {
         stage('Build Docker Native') {
           agent any
           steps {
-            unstash 'target-native_built'
+            unstash 'target_native_built'
             sh 'docker build -f src/main/docker/Dockerfile.native -t registry.zouzland.com/boutry/devops-tutorial-native .'
           }
         }
