@@ -5,7 +5,7 @@ USER root
 RUN chown -R quarkus /usr/src/app
 USER quarkus
 RUN mvn -f /usr/src/app/pom.xml clean install -DskipTests
-RUN mvn -f /usr/src/app/pom.xml quarkus:native-image -DskipTests -Pnative
+RUN mvn -f /usr/src/app/pom.xml quarkus:native-image -Pnative
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.1
 WORKDIR /work/
