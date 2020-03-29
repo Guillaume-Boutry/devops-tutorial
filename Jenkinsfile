@@ -17,16 +17,11 @@ pipeline {
         }
 
         stage('Build Native') {
-          agent {
-            docker {
-              registryUrl 'https://registry.zouzland.com/v2/'
-              registryCredentialsId 'registry'
-              image 'registry.zouzland.com/quarkus/centos-quarkus-maven:20.0.0-java11'
-            }
-          }
           steps {
-            sh "mvn package -DskipTests -Pnative"
-            stash(includes: 'target/', name: 'target_native_built')
+            withCredentials(bindings: [usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
+                sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
+                sh 'docker build -f src/main/docker/Dockerfile.native -t registry.zouzland.com/boutry/devops-tutorial-native .'
+            }
           }
         }
 
@@ -47,26 +42,14 @@ pipeline {
       }
     }
 
-    stage('Build Docker') {
-      parallel {
-        stage('Build Docker JVM') {
-          agent any
-          steps {
-            unstash 'target_built'
-            sh 'docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm .'
-          }
-        }
-
-        stage('Build Docker Native') {
-          agent any
-          steps {
-            unstash 'target_native_built'
-            sh 'docker build -f src/main/docker/Dockerfile.native -t registry.zouzland.com/boutry/devops-tutorial-native .'
-          }
-        }
-
+    stage('Build Docker JVM') {
+      agent any
+      steps {
+        unstash 'target_built'
+        sh 'docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm .'
       }
     }
+
 
     stage('Push Docker build to registry') {
       agent any
