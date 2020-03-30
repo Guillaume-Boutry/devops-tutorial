@@ -1,4 +1,6 @@
 quarkus:
+  http:
+    port: ${PORT:8080}
   datasource:
     url: jdbc:postgresql://localhost/APPLICATION
     driver: org.postgresql.Driver
