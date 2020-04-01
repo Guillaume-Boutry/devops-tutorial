@@ -2,9 +2,7 @@ package org.boutry.devops.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -29,7 +27,7 @@ public class UserEntity extends PanacheEntity {
     @Column(unique = true)
     public String email;
 
-    @OneToMany
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<CatEntity> cats = new ArrayList<>();
 
     public UserEntity() {
