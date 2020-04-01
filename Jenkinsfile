@@ -90,6 +90,11 @@ pipeline {
     }
 
     stage('Deploy release to heroku') {
+          when {
+            expression {
+              return params.TAG_BUILD
+            }
+          }
           agent {
               docker {
                 image 'registry.zouzland.com/heroku-ctn:latest'
@@ -98,12 +103,6 @@ pipeline {
               }
 
             }
-          when {
-            expression {
-              return params.TAG_BUILD
-            }
-
-          }
           steps {
             withCredentials(bindings: [usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
               sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
