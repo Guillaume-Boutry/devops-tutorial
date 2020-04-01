@@ -89,6 +89,29 @@ pipeline {
       }
     }
 
+    stage('Deploy release to heroku') {
+          agent {
+              docker {
+                image 'registry.zouzland.com/heroku-ctn:latest'
+                args '--network="host" -e DOCKER_HOST="tcp://docker:2376" -e DOCKER_CERT_PATH="/certs/client" -e DOCKER_TLS_VERIFY=1 -v "$DOCKER_CERT_PATH":"$DOCKER_CERT_PATH"'
+              }
+
+            }
+          when {
+            expression {
+              return params.TAG_BUILD
+            }
+
+          }
+          steps {
+            withCredentials(bindings: [usernamePassword(credentialsId: 'heroku_token', variable: 'API_TOKEN')]) {
+                sh "HEROKU_API_KEY=${env.API_TOKEN}"
+                sh "heroku container:release web -a devops-tutorial"
+            }
+
+          }
+        }
+
   }
   post {
     always {
