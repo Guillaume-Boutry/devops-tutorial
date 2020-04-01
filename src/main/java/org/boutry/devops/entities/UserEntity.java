@@ -9,6 +9,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class UserEntity extends PanacheEntity {
     public String email;
 
     @OneToMany
-    public List<CatEntity> cats;
+    public List<CatEntity> cats = new ArrayList<>();
 
     public UserEntity() {
 

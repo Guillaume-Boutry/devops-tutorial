@@ -93,6 +93,7 @@ pipeline {
           agent {
               docker {
                 image 'registry.zouzland.com/heroku-ctn:latest'
+                registryCredentialsId 'registry'
                 args '--network="host" -e DOCKER_HOST="tcp://docker:2376" -e DOCKER_CERT_PATH="/certs/client" -e DOCKER_TLS_VERIFY=1 -v "$DOCKER_CERT_PATH":"$DOCKER_CERT_PATH"'
               }
 
