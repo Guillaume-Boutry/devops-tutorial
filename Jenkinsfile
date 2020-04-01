@@ -104,8 +104,15 @@ pipeline {
 
           }
           steps {
+            withCredentials(bindings: [usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
+              sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
+              sh 'docker pull registry.zouzland.com/boutry/devops-tutorial-native:' + params.TAG
+              sh 'docker tag registry.zouzland.com/boutry/devops-tutorial-native:' + params.TAG + " registry.heroku.com/devops-tutorial/web"
+            }
             withCredentials(bindings: [usernamePassword(credentialsId: 'heroku_token', variable: 'API_TOKEN')]) {
                 sh "HEROKU_API_KEY=${env.API_TOKEN}"
+                sh "heroku container:login"
+                sh "docker push registry.heroku.com/devops-tutorial/web"
                 sh "heroku container:release web -a devops-tutorial"
             }
 
