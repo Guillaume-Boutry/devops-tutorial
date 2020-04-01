@@ -4,10 +4,12 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -25,6 +27,9 @@ public class UserEntity extends PanacheEntity {
     @Email
     @Column(unique = true)
     public String email;
+
+    @OneToMany
+    public List<CatEntity> cats;
 
     public UserEntity() {
 
