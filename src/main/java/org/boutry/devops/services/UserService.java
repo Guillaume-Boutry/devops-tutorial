@@ -1,5 +1,6 @@
 package org.boutry.devops.services;
 
+import org.boutry.devops.entities.CatEntity;
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.exception.ViolationException;
 import org.boutry.devops.resources.UserResource;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -67,5 +69,9 @@ public class UserService {
             throw new NotFoundException("User not found");
         }
         userOptional.get().delete();
+    }
+
+    public List<CatEntity> getUserCats(UserEntity userEntity) {
+        return CatEntity.list("owner_id", userEntity.id);
     }
 }

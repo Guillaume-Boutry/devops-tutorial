@@ -1,5 +1,6 @@
 package org.boutry.devops.resources;
 
+import org.boutry.devops.entities.CatEntity;
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.exception.ViolationException;
 import org.boutry.devops.services.UserService;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
+import java.util.List;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -51,4 +53,10 @@ public class UserResource {
         service.deleteUser(userEntity);
     }
 
+    @GET
+    @Path("/{id}/cats")
+    public List<CatEntity> getUserCats(@PathParam("id") long id) {
+        UserEntity userEntity = service.getUser(id);
+        return service.getUserCats(userEntity);
+    }
 }

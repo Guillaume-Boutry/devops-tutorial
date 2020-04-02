@@ -20,7 +20,7 @@ create table catentity
         constraint catentity_pkey
             primary key,
     name varchar(255) not null,
-    owner_id  bigint not null references userentity(id)
+    owner bigint not null references userentity(id)
 );
 
 alter table userentity

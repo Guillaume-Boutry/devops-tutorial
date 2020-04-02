@@ -2,18 +2,22 @@ package org.boutry.devops.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 
+
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.IntSequenceGenerator.class,
+//        property="id")
 @Entity
-public class UserEntity extends PanacheEntity {
+public class UserEntity extends PanacheEntity implements Serializable {
 
     @NotNull(message = "Firstname must not be null")
     @NotBlank(message = "Firstname must not be blank")
@@ -26,9 +30,6 @@ public class UserEntity extends PanacheEntity {
     @Email
     @Column(unique = true)
     public String email;
-
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public List<CatEntity> cats = new ArrayList<>();
 
     public UserEntity() {
 
