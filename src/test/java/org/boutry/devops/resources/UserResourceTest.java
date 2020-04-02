@@ -3,13 +3,22 @@ package org.boutry.devops.resources;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.boutry.devops.entities.UserEntity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import javax.transaction.Transactional;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 class UserResourceTest {
+
+    @AfterEach
+    @Transactional
+    void tearDown() {
+        UserEntity.deleteAll();
+    }
 
     @Test
     public void testGetUserEntity() {

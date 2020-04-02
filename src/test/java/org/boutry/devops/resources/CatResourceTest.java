@@ -6,9 +6,11 @@ import org.boutry.devops.entities.CatEntity;
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.exception.ViolationException;
 import org.boutry.devops.services.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,6 +21,13 @@ public class CatResourceTest {
 
     @Inject
     UserService userService;
+
+    @AfterEach
+    @Transactional
+    void tearDown() {
+        CatEntity.deleteAll();
+        UserEntity.deleteAll();
+    }
 
     @Test
     public void testGetCatEntity() {
