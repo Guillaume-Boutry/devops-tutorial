@@ -2,7 +2,7 @@ version: "3"
 
 services:
   webserver:
-    image: registry.zouzland.com/boutry/devops-tutorial-native:0.1.0
+    image: registry.zouzland.com/boutry/devops-tutorial-native:0.3.0
     restart: always
     depends_on:
       - db
@@ -26,7 +26,7 @@ services:
       POSTGRES_DB: APPLICATION
     volumes:
       - postgres-persistence:/var/lib/postgresql/data
-      #- ./init_database.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init_database.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
   default:
