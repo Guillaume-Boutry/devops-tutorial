@@ -14,15 +14,20 @@ create table userentity
     lastname  varchar(255) not null
 );
 
+alter table userentity
+    owner to devops;
+
 create table catentity
 (
-    id        bigint       not null
+    id       bigint       not null
         constraint catentity_pkey
             primary key,
-    name varchar(255) not null,
-    owner bigint not null references userentity(id)
+    name     varchar(255) not null,
+    owner_id bigint       not null
+        constraint catentity_owner_id_fkey
+            references userentity
 );
 
-alter table userentity
+alter table catentity
     owner to devops;
 
