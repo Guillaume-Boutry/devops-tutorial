@@ -34,7 +34,6 @@ public class CatResource {
     @POST
     @Transactional
     public Response createCat(@Context UriInfo uriInfo, CatEntity newCat) throws ViolationException {
-        System.out.println(newCat);
         return service.createCat(uriInfo, newCat);
     }
 

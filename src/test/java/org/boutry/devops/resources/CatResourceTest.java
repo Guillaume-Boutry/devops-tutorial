@@ -4,38 +4,34 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.boutry.devops.entities.CatEntity;
 import org.boutry.devops.entities.UserEntity;
+import org.boutry.devops.exception.ViolationException;
+import org.boutry.devops.services.UserService;
 import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @QuarkusTest
 public class CatResourceTest {
 
+    @Inject
+    UserService userService;
 
     @Test
     public void testGetCatEntity() {
         UserEntity user = new UserEntity("Patrick", "Jamboni", "patrick.jamboni@gmail.com");
-        String location = given()
-                .when()
-                .contentType(ContentType.JSON)
-                .body(user)
-                .post("/api/user")
-                .then()
-                .statusCode(201)
-                .extract()
-                .header("Location");
-        UserEntity owner = given()
-                .when()
-                .get(location)
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(UserEntity.class);
+        try {
+            user = userService.createUser(user);
+        } catch (ViolationException e) {
+            fail(e);
+        }
         CatEntity cat = new CatEntity();
         cat.name = "Freyja";
-        cat.owner = owner;
-        location = given()
+        cat.owner = user;
+        String location = given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(cat)

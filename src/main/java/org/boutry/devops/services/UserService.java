@@ -7,6 +7,7 @@ import org.boutry.devops.resources.UserResource;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.NotFoundException;
@@ -36,6 +37,22 @@ public class UserService {
         return userOptional.get();
     }
 
+    @Transactional
+    public UserEntity createUser(UserEntity newUser) throws ViolationException {
+        Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
+        if (!violations.isEmpty()) {
+            throw new ViolationException(violations.toArray(new ConstraintViolation[]{}));
+        }
+        UserEntity user = new UserEntity();
+        user.email = newUser.email;
+        user.lastname = newUser.lastname;
+        user.firstname = newUser.firstname;
+        user.persist();
+
+        return user;
+    }
+
+    @Transactional
     public Response createUser(UriInfo uriInfo, UserEntity newUser) throws ViolationException {
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
         if (!violations.isEmpty()) {
@@ -52,6 +69,7 @@ public class UserService {
         return Response.created(uri).build();
     }
 
+    @Transactional
     public void modifyUser(UserEntity userEntity) {
         Optional<UserEntity> userOptional = UserEntity.findByIdOptional(userEntity.id);
         if (userOptional.isEmpty()) {
@@ -63,6 +81,7 @@ public class UserService {
         user.email = userEntity.email;
     }
 
+    @Transactional
     public void deleteUser(UserEntity userEntity) {
         Optional<UserEntity> userOptional = UserEntity.findByIdOptional(userEntity.id);
         if (userOptional.isEmpty()) {
