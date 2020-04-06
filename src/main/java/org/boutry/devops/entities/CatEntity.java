@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Optional;
 
 @Entity
 public class CatEntity extends PanacheEntity implements Serializable {
@@ -16,6 +17,14 @@ public class CatEntity extends PanacheEntity implements Serializable {
 
     @ManyToOne
     public UserEntity owner;
+
+    public static CatEntity findById(long id) {
+        return find("id", id).firstResult();
+    }
+
+    public static Optional<CatEntity> findByIdOptional(long id) {
+        return Optional.ofNullable(CatEntity.findById(id));
+    }
 
     @Override
     public String toString() {

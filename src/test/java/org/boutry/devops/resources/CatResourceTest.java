@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import org.boutry.devops.entities.CatEntity;
 import org.boutry.devops.entities.UserEntity;
 import org.boutry.devops.exception.ViolationException;
+import org.boutry.devops.services.CatService;
 import org.boutry.devops.services.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,9 @@ public class CatResourceTest {
 
     @Inject
     UserService userService;
+
+    @Inject
+    CatService catService;
 
     @AfterEach
     @Transactional
@@ -58,5 +62,39 @@ public class CatResourceTest {
                 .as(CatEntity.class);
         assertEquals(cat.name, returnedCat.name);
         assertEquals(cat.owner.email, returnedCat.owner.email);
+    }
+
+    @Test
+    public void modifyCat() {
+        UserEntity user = new UserEntity("Patrick", "Jamboni", "patrick.jamboni@gmail.com");
+        CatEntity cat = new CatEntity();
+        cat.name = "Freyja";
+        try {
+            user = userService.createUser(user);
+            cat.owner = user;
+            cat = catService.createCat(cat);
+        } catch (ViolationException e) {
+            fail(e);
+        }
+
+        cat.name = "Lili";
+        System.out.println(cat);
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(cat)
+                .put("/api/cat")
+                .then()
+                .statusCode(204);
+
+        CatEntity returnedCat = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .get(String.format("/api/cat/%d", cat.id))
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(CatEntity.class);
+        assertEquals(cat.name, returnedCat.name);
     }
 }
