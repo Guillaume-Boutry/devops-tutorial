@@ -1,0 +1,84 @@
+---
+
+# 1. Install packages needed for Docker
+
+- name: Install yum utils
+  yum:
+    name: yum-utils
+    state: latest
+
+- name: Install device-mapper-persistent-data
+  yum:
+    name: device-mapper-persistent-data
+    state: latest
+
+- name: Install lvm2
+  yum:
+    name: lvm2
+    state: latest
+
+- name: Add Docker repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+  become: yes
+
+- name: Install Docker
+  package:
+    name: docker-ce
+    state: latest
+  become: yes
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Add user vagrant to docker group
+  user:
+    name: vagrant
+    groups: docker
+    append: yes
+  become: yes
+
+- name: Install gcc
+  yum:
+    name: gcc
+    state: present
+
+- name: Install python dev headers
+  yum:
+    name: python-devel
+    state: present
+
+- name: Install pip
+  yum:
+    name: python-pip
+    state: present
+
+- name: Update pip
+  pip:
+    name: pip
+    state: latest
+
+- name: Install docker python package
+  pip:
+    name: docker
+    state: present
+
+- name: Install Configparser
+  pip:
+    name: configparser
+    state: latest
+
+- name: Install zipp
+  pip:
+    name: zipp
+    state: latest
+
+- name: Install docker-compose package
+  pip:
+    name: docker-compose
+    state: latest

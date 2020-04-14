@@ -1,0 +1,15 @@
+---
+- name: Log into private registry
+  docker_login:
+    registry: registry.zouzland.com
+    username: guillaume 
+    password: wellan
+- name: Tear down existing services
+  docker_compose:
+    project_src: /vagrant/devops
+    state: absent
+
+- name: Create and start services
+  docker_compose:
+    project_src: /vagrant/devops
+  register: output

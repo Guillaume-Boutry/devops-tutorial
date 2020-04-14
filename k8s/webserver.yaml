@@ -10,6 +10,13 @@ spec:
   selector:
     app: webserver
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user-api-account
+  labels:
+    account: user-api
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,9 +33,10 @@ spec:
       labels:
         app: webserver
     spec:
+      serviceAccountName: user-api-account
       containers:
         - name: webserver
-          image: registry.zouzland.com/boutry/devops-tutorial-native:0.2.0
+          image: registry.zouzland.com/boutry/devops-tutorial-native:0.3.0
           ports:
             - containerPort: 8080
           env:

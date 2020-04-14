@@ -1,0 +1,10 @@
+---
+- hosts: docker_server
+  # Run commands as root
+  become: true
+  # Roles to be executed on these hosts
+  roles:
+  - role: docker/install
+    tags: install
+  - role: docker/tutorial
+    tags: run

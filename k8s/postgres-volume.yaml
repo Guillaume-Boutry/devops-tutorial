@@ -3,26 +3,12 @@ kind: PersistentVolume
 metadata:
   name: postgres-k8s-persistence
 spec:
-  capacity:
-    storage: 5Gi
-  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Recycle
-  storageClassName: slow
-  mountOptions:
-    - hard
-    - nfsvers=4.1
-  local:
-    path: /mnt/k8s
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - gl552vw
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /data/k8s/postgresql
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
