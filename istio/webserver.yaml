@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver
+  labels:
+    app: webserver
+spec:
+  ports:
+    - name: http-port
+      protocol: TCP
+      port: 8080
+  selector:
+    app: webserver
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user-api-account
+  labels:
+    account: user-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-0.3.0
+  labels:
+    app: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+        version: v2
+    spec:
+      serviceAccountName: user-api-account
+      containers:
+        - name: webserver
+          image: registry.zouzland.com/boutry/devops-tutorial-native:0.3.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: quarkus.datasource.url
+              value: "jdbc:postgresql://postgres/APPLICATION"
+            - name: quarkus.hibernate-orm.database.generation
+              value: "drop-and-create"
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-0.2.0
+  labels:
+    app: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+        version: v1
+    spec:
+      serviceAccountName: user-api-account
+      containers:
+        - name: webserver
+          image: registry.zouzland.com/boutry/devops-tutorial-native:0.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: quarkus.datasource.url
+              value: "jdbc:postgresql://postgres/APPLICATION"
+            - name: quarkus.hibernate-orm.database.generation
+              value: "drop-and-create"
+      imagePullSecrets:
+        - name: regcred

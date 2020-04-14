@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: webserver-virtual-service
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - devops-gateway
+  tcp:
+  - match:
+    - port: 31400
+    route:
+      - destination:
+          host: webserver
+          port:
+            number: 8080
+          subset: v1
+        weight: 80
+      - destination:
+          host: webserver
+          port:
+            number: 8080
+          subset: v2
+        weight: 20
