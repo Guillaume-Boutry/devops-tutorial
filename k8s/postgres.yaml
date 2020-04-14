@@ -49,5 +49,11 @@ spec:
           volumeMounts:
             - name: postgres-k8s-persistence
               mountPath: /var/lib/postgresql/data
+            - name: config
+              mountPath: /docker-entrypoint-initdb.d/init.sql
+              subPath: init_database.sql
       volumes:
         - name: postgres-k8s-persistence
+        - name: config
+          configMap:
+            name: postgres-initsql
