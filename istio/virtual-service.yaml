@@ -7,9 +7,10 @@ spec:
   - "*"
   gateways:
   - devops-gateway
-  tcp:
+  http:
   - match:
-    - port: 31400
+    - uri:
+        prefix: /api
     route:
       - destination:
           host: webserver
