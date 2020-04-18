@@ -23,7 +23,7 @@ You can run your application in dev mode that enables live coding using:
 
 ## Packaging and running the application
 
-The application is packageable using `./mvnw package`.
+The application is packageable using `./mvnw package`. This command will also run Unit Test. You need DOCKER for unit tests to work.
 
 It produces the executable `devops-tutorial-0.3.0-SNAPSHOT-runner.jar` file in `/target` directory.
 
