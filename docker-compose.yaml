@@ -2,7 +2,7 @@ version: "3"
 
 services:
   webserver:
-    image: registry.zouzland.com/boutry/devops-tutorial-native:0.3.0
+    image: registry.zouzland.com/boutry/devops-tutorial-jvm:latest
     restart: always
     depends_on:
       - db

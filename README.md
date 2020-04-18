@@ -75,7 +75,11 @@ Release version can only be built from manual execution from Jenkins.
 ## Docker-compose
 Run `docker-compose up` and you will be served.
 
-Connect to [http://127.0.0.1:8080/api/user]
+Connect to http://127.0.0.1:8080/api/user
+
+You can connect to http://127.0.0.1:8080/swagger-ui/ to play around with the API.
+
+(To create a cat, you just need to give the owner id and cat name, no need to give all informations about ower.)
 
 ## K8S
 
@@ -97,4 +101,4 @@ Run `vagrant up` from ansible folder.
 
 It will install every package you need and run docker-compose for you.
 
-Connect to [http://30.30.30.3:8080/api/user]
+Connect to http://30.30.30.3:8080/api/user
