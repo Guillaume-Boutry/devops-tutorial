@@ -6,32 +6,25 @@ services:
     restart: always
     depends_on:
       - db
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
     environment:
-      quarkus.datasource.url: jdbc:postgresql://db:5432/APPLICATION
+      quarkus.datasource.url: jdbc:postgresql://db:5432/user_api
       quarkus.hibernate-orm.database.generation: none
-      VIRTUAL_HOST: devops.zouzland.com
-      VIRTUAL_PORT: 8080
-      LETSENCRYPT_HOST: devops.zouzland.com
-      VIRTUAL_NETWORK: nginx-proxy
+      quarkus.datasource.username: patrickfiori
+      quarkus.datasource.password: NicePasswordM8
   db:
     image: postgres:latest
     restart: always
     expose:
       - "5432"
     environment:
-      POSTGRES_PASSWORD: devops
-      POSTGRES_USER: devops
-      POSTGRES_DB: APPLICATION
+      POSTGRES_PASSWORD: NicePasswordM8
+      POSTGRES_USER: patrickfiori
+      POSTGRES_DB: user_api
     volumes:
-      - postgres-persistence:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
       - ./init_database.sql:/docker-entrypoint-initdb.d/init.sql
 
-networks:
-  default:
-    external:
-      name: nginx-proxy
-
 volumes:
-  postgres-persistence:
+  postgres:

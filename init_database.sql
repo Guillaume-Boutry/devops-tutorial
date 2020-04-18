@@ -1,6 +1,6 @@
 create sequence hibernate_sequence;
 
-alter sequence hibernate_sequence owner to devops;
+alter sequence hibernate_sequence owner to patrickfiori;
 
 create table userentity
 (
@@ -15,7 +15,7 @@ create table userentity
 );
 
 alter table userentity
-    owner to devops;
+    owner to patrickfiori;
 
 create table catentity
 (
@@ -29,5 +29,5 @@ create table catentity
 );
 
 alter table catentity
-    owner to devops;
+    owner to patrickfiori;
 

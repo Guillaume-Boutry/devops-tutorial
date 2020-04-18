@@ -20,7 +20,7 @@ pipeline {
           steps {
             withCredentials(bindings: [usernamePassword(credentialsId: 'registry', passwordVariable: 'registryPassword', usernameVariable: 'registryUser')]) {
                 sh "docker login -u ${env.registryUser} -p ${env.registryPassword} registry.zouzland.com"
-                sh 'docker build -f src/main/docker/Dockerfile.native --cpuset-cpus 0,1,2 -t registry.zouzland.com/boutry/devops-tutorial-native .'
+                sh 'docker build -f src/main/docker/Dockerfile.native --cpuset-cpus 0,1,2 -t registry.zouzland.com/boutry/devops-tutorial-native:latest .'
             }
           }
         }
@@ -46,7 +46,7 @@ pipeline {
       agent any
       steps {
         unstash 'target_built'
-        sh 'docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm .'
+        sh 'docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm:latest .'
       }
     }
 
