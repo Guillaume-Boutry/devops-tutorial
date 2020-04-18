@@ -48,6 +48,12 @@ Native built with docker image quay.io/quarkus/centos-quarkus-maven:20.0.0-java1
 To build the jvm docker image run this command from the project root: 
 `docker build -f src/main/docker/Dockerfile.jvm -t registry.zouzland.com/boutry/devops-tutorial-jvm:latest .`
 
+You can override any configuration with environment variables, but you can also mount a yaml file to `/work/config/application.yaml`.
+
+Exemple of a yaml file in `src/main/resources/application.yaml`.
+
+You need to flatten the variables like this quarkus.datasource.url.
+
 To build this image, you need to connect to my private registry.
 
 `docker login registry.zouzland.com`
