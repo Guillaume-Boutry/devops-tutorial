@@ -87,7 +87,15 @@ You can connect to http://127.0.0.1:8080/swagger-ui/ to play around with the API
 
 (To create a cat, you just need to give the owner id and cat name, no need to give all informations about ower.)
 
+
+##### Warning: In the following section, I used `minikube start --driver=docker`. It's only available on Linux and Mac. Because of that the way to access the gateway is a bit differente. I can't use the minikube IP, but I can use the external IP of the ingress gateway.
+
 ## K8S
+Create a registry secret containing the credentials to the registry.
+```
+kubectl create secret docker-registry regcred --docker-server=registry.zouzland.com --docker-username=adaltas --docker-password=adaltas --docker-email=tt@tt.com
+```
+
 
 Just apply every yamls in k8s folder.
 
@@ -97,9 +105,22 @@ Postgres-volume and configmap should be applied first.
 
 Don't forget to remove all k8s yamls from the step before
 
-Just apply every yamls in istio folder.
+Create a registry secret containing the crendentials to the registry.
+```
+kubectl create secret docker-registry regcred --docker-server=registry.zouzland.com --docker-username=adaltas --docker-password=adaltas --docker-email=tt@tt.com
+```
+
+Just apply every yamls from istio folder.
 
 Postgres-volume and configmap sould be applied first.
+
+You don't need minikube tunnel to access the cluster if you run minikube with `minikube start --driver=docker`
+
+On a terminal:
+```
+export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo Click on http://$INGRESS_HOST/user/api
+```
 
 ## Ansible
 

@@ -7,7 +7,7 @@ spec:
     istio: ingressgateway
   servers:
   - port:
-      number: 31400 
+      number: 80 
       name: incoming-http
       protocol: HTTP
     hosts:
