@@ -1,3 +1,4 @@
+[![Build Status](https://jenkins.zouzland.com/buildStatus/icon?job=devops-project-api%2Fmaster)](https://jenkins.zouzland.com/job/devops-project-api/job/master/) ![Heroku](http://heroku-badge.herokuapp.com/?app=devops-tutorial&style=flat&svg=1&root=api/user)
 # devops-tutorial project
 ###### Author: Guillaume Boutry
 
